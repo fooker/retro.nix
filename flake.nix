@@ -1,12 +1,11 @@
 {
   inputs = { };
 
-  outputs = { self, ... }: {
-    nixosModules = {
-      retro = import ./.;
-      default = self.nixosModules.retro;
+  outputs = { utils, nixpkgs, ... }: rec {
+    nixosModules = rec {
+      retro = import ./module.nix;
+      default = retro;
     };
-
-    nixosModule = self.nixosModules.default;
+    nixosModule = nixosModules.default;
   };
 }

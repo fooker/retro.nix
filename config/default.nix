@@ -3,13 +3,7 @@
 with lib;
 
 {
-  options.retro = {
-    enable = mkEnableOption "retro gaming";
-
-    autostart = {
-      enable = mkEnableOption "automatic start";
-    };
-
+  options = {
     systems = mkOption {
       description = "Emulated Systems";
       type = types.attrsOf (types.submodule ({ name, config, ... }: {
@@ -57,6 +51,7 @@ with lib;
                 };
               };
             }));
+            default = { };
           };
 
           defaultEmulator = mkOption {
@@ -65,19 +60,27 @@ with lib;
               (_: emulator: emulator.enable)
               config.emulators));
           };
+
+          games = mkOption {
+            description = "Games for this system";
+            type = types.listOf (types.submodule ({ ... }: {
+              options = {
+                
+              };
+            }));
+            default = [ ];
+          };
         };
       }));
+      default = { };
     };
   };
 
   imports = [
     ./systems.nix
-    ./emulationstation.nix
-    ./autostart.nix
   ];
 
-  config = mkIf config.retro.enable {
+  config = {
+    # TODO: Add assertion to check emulator names are globally unique
   };
-
-  # TODO: Add assertion to check emulator names are globally unique
 }

@@ -1,10 +1,10 @@
-{ lib, config, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 with lib;
 
 let
   # config file for RetroArch with overrides
-  retroArchConfig = overrides: pkgs.writeText "retroarch.cfg" (concatStringsSep "\n"
+  writeRetroArchConfig = overrides: pkgs.writeText "retroarch.cfg" (concatStringsSep "\n"
     (mapAttrsToList
       ({ name, value }: "${name} = \"${value}\"")
       (recursiveUpdate {
@@ -17,17 +17,16 @@ let
     core,
     overrides ? {}
   }: let
-    retroarch = pkgs.retroarch.override {
+    pkg = pkgs.retroarch.override {
       cores = singleton pkgs.libretro.${core};
     };
-    config = retroArchConfig overrides;
   in {
     inherit enable description;
-    command = "${retroarch}/bin/retroarch -L ${core} --config ${config} %ROM%";
+    command = "${pkg}/bin/retroarch -L ${core} --config ${writeRetroArchConfig overrides} %ROM%";
   };
 
 in {
-  retro.systems = {
+  systems = {
     snes = {
       fullName = "Super Nintendo";
       fileExtensions = [ "smc" "sfc" "swc" "mgd" ];

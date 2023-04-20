@@ -13,9 +13,9 @@
 , freetype
 , curl
 , alsa-lib
-, libarchive
 , vlc
 , rapidjson
+, makeWrapper
 , ... }:
 
 stdenv.mkDerivation rec {
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     cmake
+    makeWrapper
   ];
 
   buildInputs = [
@@ -43,8 +44,17 @@ stdenv.mkDerivation rec {
     freetype
     curl
     alsa-lib
-    # libarchive
     vlc
     rapidjson
   ];
+
+  postInstall = ''
+    mkdir "$out/shared"
+    cp -R "$src/resources" "$out/shared"
+  '';
+
+  postFixup = ''
+    wrapProgram "$out/bin/emulationstation" \
+      --chdir "$out/shared"
+  '';
 }
