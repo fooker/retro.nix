@@ -4,30 +4,21 @@ with lib;
 
 mkIf config.retro.autostart.enable {
   users = {
-    mutableUsers = false;
-    users.root = {
-      openssh.authorizedKeys.keys =
-        let
-          keys = pkgs.callPackage sshkeys { };
-        in
-        concatLists (attrValues keys.keys);
-    };
-
-    users.retroarch = {
+    users.retro = {
       isSystemUser = true;
-      group = "retroarch";
+      group = "retro";
       extraGroups = [ "input" "video" ];
     };
-    groups.retroarch = { };
+    groups.retro = { };
   };
 
-  systemd.services."emulationstation" = {
-    description = "EmulationStation";
+  systemd.services."reto" = {
+    description = "Retro Gaming";
     after = [ "systemd-user-sessions.service" "sound.target" ];
     conflicts = [ "getty@tty1.service" ];
 
     serviceConfig = {
-      ExecStart = "${emulationstation}/bin/emulationstation";
+      ExecStart = "${config.retro.launcher}/bin/retro";
       Restart = "always";
 
       User = "retro";

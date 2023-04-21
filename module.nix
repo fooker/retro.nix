@@ -2,10 +2,7 @@
 
 with lib;
 
-let
-  launcher = (pkgs.callPackage ./launcher.nix { }) config.retro;
-
-in {
+{
   options.retro = mkOption {
     description = "Retro Gaming Configuration";
     type = types.submodule ({
@@ -14,6 +11,13 @@ in {
 
         autostart = {
           enable = mkEnableOption "automatic start";
+        };
+
+        launcher = mkOption {
+          description = "Launcher path";
+          type = types.package;
+          readOnly = true;
+          default = (pkgs.callPackage ./launcher.nix { }) config.retro;
         };
       };
       
@@ -29,7 +33,7 @@ in {
 
   config = mkIf config.retro.enable {
     environment.systemPackages = [
-      launcher
+      config.retro.launcher
     ];
   };
 
