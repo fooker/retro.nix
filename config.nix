@@ -8,7 +8,7 @@ rec {
   };
 
   module = { ... }: {
-    imports = [ ./config ];
+    imports = [ ./config ./systems ];
     config = {
       _module.args = {
         inherit pkgs lib;
@@ -17,6 +17,6 @@ rec {
   };
 
   launcher = config:
-    (pkgs.callPackage ./launcher.nix { })
+    (pkgs.callPackage ./launcher { })
     (eval config).config;
 }

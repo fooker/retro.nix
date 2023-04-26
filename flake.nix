@@ -1,7 +1,7 @@
 {
   inputs = { };
 
-  outputs = { utils, nixpkgs, ... }: rec {
+  outputs = { ... }: rec {
     nixosModules = rec {
       retro = import ./module.nix;
       default = retro;
