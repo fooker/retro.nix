@@ -12,7 +12,7 @@ mkIf config.retro.autostart.enable {
     groups.retro = { };
   };
 
-  systemd.services."reto" = {
+  systemd.services."retro" = {
     description = "Retro Gaming";
     after = [ "systemd-user-sessions.service" "sound.target" ];
     conflicts = [ "getty@tty1.service" ];
