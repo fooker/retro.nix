@@ -36,17 +36,17 @@ let
   };
   
   retroArchInputConfig = player: let
-    mkInput = name: keymap: optional (keymap != null) {
-      "key" = nameValuePair
+    mkInput = name: keymap: optionals (keymap != null) concatLists [
+      (optional (keymap.key != null) (nameValuePair
         "input_player${toString (player.index + 1)}_${name}"
-        keymap.key;
-      "button" = nameValuePair
+        keymap.key))
+      (optional (keymap.button != null) (nameValuePair
         "input_player${toString (player.index + 1)}_${name}_btn"
-        keymap.button;
-      "axis" = nameValuePair
-        "input_player${toString (player.index + 1)}_${name}"
-        "${keymap.direction}${keymap.axis}";
-    }.${keymap.type};
+        keymap.button))
+      (optional (keymap.axis != null) (nameValuePair
+        "input_player${toString (player.index + 1)}_${name}_axis"
+        "${keymap.axis.direction}${toString keymap.axis.index}"))
+    ];
   in optionalAttrs
     (player != null)
     (listToAttrs (concatLists [

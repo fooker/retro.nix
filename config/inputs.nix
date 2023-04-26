@@ -8,50 +8,31 @@ in {
   options.inputs = let
     mkKeyMapOption = name: mkOption {
       description = "Input '${name}'";
-      type = types.nullOr (types.oneOf (let
-        mkInputType = type: module: types.submodule [ module {
-          options = {
-            type = mkOption {
-              description = "Type of input";
-              type = types.enum [ "key" "button" "axis" ];
-              readOnly = true;
-              default = type;
-            };
+      type = types.nullOr (types.submodule {
+        options = {
+          key = mkOption {
+            description = "Key to bind to input";
+            type = types.nullOr (types.enum (attrNames (import ../keycodes.nix)));
+            default = null;
           };
-        } ];
-      in [
-        (mkInputType "key" {
-          options = {
-            key = mkOption {
-              description = "Key to bind to input";
-              type = types.enum (attrNames (import ../keycodes.nix));
-            };
-          };
-        })
-        
-        (mkInputType "axis" {
-          options = {
-            axis = mkOption {
-              description = "Axis to bind to input";
-              type = types.int.unsigned;
-            };
 
-            direction = mkOption {
-              description = "Axis direction for input";
-              type = types.enum [ "+" "-" ];
-            };
+          axis = mkOption {
+            description = "Axis to bind to input";
+            type = types.nullOr (types.strMatching ''[\+-][[:digit:]]+'');
+            apply = mapNullable (s: {
+              direction = substring 0 1 s;
+              index = toIntBase10 (substring 1 ((stringLength s) - 1) s);
+            });
+            default = null;
           };
-        })
 
-        (mkInputType "button" {
-          options = {
-            button = mkOption {
-              description = "Butotn to bind to input";
-              type = types.int.unsigned;
-            };
+          button = mkOption {
+            description = "Button to bind to input";
+            type = types.nullOr types.ints.unsigned;
+            default = null;
           };
-        })
-      ]));
+        };
+      });
       default = null;
     };
 

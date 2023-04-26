@@ -14,7 +14,7 @@ let
       (player != null)
       (concatLists (mapAttrsToList
         (name: mapping: optional
-          (mapping != null && mapping.type == "key")
+          (mapping != null && mapping.key != null)
           {
             inherit name;
             inherit (mapping) key;
