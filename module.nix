@@ -17,11 +17,11 @@ with lib;
           description = "Launcher path";
           type = types.package;
           readOnly = true;
-          default = (pkgs.callPackage ./launcher.nix { }) config.retro;
+          default = (pkgs.callPackage ./launcher { }) config.retro;
         };
       };
       
-      imports = [ ./config ];
+      imports = [ ./config ./systems ];
 
       config = {
         _module.args = {

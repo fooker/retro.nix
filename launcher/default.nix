@@ -31,7 +31,12 @@ in pkgs.runCommandLocal "launcher" {
     nativeBuildInputs = [ pkgs.makeWrapper ];
 } ''
   makeWrapper "${emulationstation}/bin/emulationstation" "$out/bin/retro" \
-    --set HOME "${home}"
+    --add-flags "--home ${home}" \
+    --add-flags "--force-kid" \
+    --add-flags "--force-disable-filters" \
+    --add-flags "--no-exit" \
+    --add-flags "--no-splash" \
+    --add-flags "--gamelist-only"
   
   ln -s "${home}" "$out/home"
 ''
