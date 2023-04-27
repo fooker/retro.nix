@@ -79,7 +79,7 @@ let
     (system: games: mapAttrsToList
       (_: path: let
         scraped = scrape path;
-      in traceValSeq {
+      in {
         inherit path system;
         
         inherit (importJSON "${scraped}/info.json") file name description;
