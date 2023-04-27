@@ -6,7 +6,9 @@
 
 with lib;
 
-linkFarm "emulationstation-gamelists" (mapAttrs'
+let
+  
+in linkFarm "emulationstation-gamelists" (mapAttrs'
   (system: games: nameValuePair "${system}/gamelist.xml" (writeText "emulationstation-gamelists-${system}" ''
     <gameList>
     ${concatMapStringsSep "\n" (game: with game; ''

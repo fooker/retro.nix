@@ -14,6 +14,9 @@ stdenvNoCC.mkDerivation rec {
     rev = "1d1bf42537696076a10d2c5c5f045d93a9788e62";
   };
 
+  preferLocalBuild = true;
+  allowSubstitutes = false;
+
   makeFlags = [
     "PREFIX=$(out)"
     "INSTALLDIR=$(PREFIX)/share/retroarch/assets"
@@ -22,7 +25,7 @@ stdenvNoCC.mkDerivation rec {
   dontBuild = true;
 
   meta = with lib; {
-    description = "Libretro's database files";
+    description = "RetroArch asset files";
     homepage = "https://libretro.com";
     license = licenses.mit;
     platforms = platforms.all;

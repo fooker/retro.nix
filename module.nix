@@ -5,7 +5,7 @@ with lib;
 {
   options.retro = mkOption {
     description = "Retro Gaming Configuration";
-    type = types.submodule ({
+    type = types.submodule ({ config, ... }: {
       options = {
         enable = mkEnableOption "retro gaming";
 
@@ -17,7 +17,13 @@ with lib;
           description = "Launcher path";
           type = types.package;
           readOnly = true;
-          default = (pkgs.callPackage ./launcher { }) config.retro;
+          default = (pkgs.callPackage ./launcher { }) config;
+        };
+
+        scrape = mkOption {
+          description = "Paths to scrape for games";
+          type = types.listOf types.path;
+          default = [];
         };
       };
       
@@ -27,6 +33,10 @@ with lib;
         _module.args = {
           inherit pkgs lib;
         };
+
+        games = concatMap
+          (path: pkgs.callPackage ./scrape.nix { gamesDir = path; })
+          config.scrape;
       };
     });
   };

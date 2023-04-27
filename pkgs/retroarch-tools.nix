@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Libretro's database files";
+    description = "RetroArch tools";
     homepage = "https://libretro.com";
     license = licenses.mit;
     platforms = platforms.all;

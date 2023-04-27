@@ -14,14 +14,17 @@ stdenvNoCC.mkDerivation rec {
     rev = "v${version}";
   };
 
+  preferLocalBuild = true;
+  allowSubstitutes = false;
+
+  dontBuild = true;
+
   installPhase = ''
     cp -r $src $out
   '';
 
-  dontBuild = true;
-
   meta = with lib; {
-    description = "Libretro's database files";
+    description = "RetroArch core info files";
     homepage = "https://libretro.com";
     license = licenses.mit;
     platforms = platforms.all;
