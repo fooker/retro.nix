@@ -10,7 +10,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "libretro-core-info";
-    hash = "sha256-ALHh9QmxniJYiWVI8P0iByefRcCiDNx7xyIYzpWr1ek=";
+    hash = "sha256-WIgcHuZgAOrlg+WyOS4TyzWziNzjyQB2sPDM9fR6kwA=";
     rev = "v${version}";
   };
 
