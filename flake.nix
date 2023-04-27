@@ -11,8 +11,8 @@
     nixosModule = nixosModules.default;
 
   } // (flake-utils.lib.eachDefaultSystem (system: let
-    pkgs = nixpkgs.legacy.${system};
+    pkgs = nixpkgs.legacyPackages.${system};
   in {
-    scrape = pkgs.callPackage ./scrape.nix { };
+    scrape = gamesDir: pkgs.callPackage ./scrape.nix { inherit gamesDir; };
   }));
 }
