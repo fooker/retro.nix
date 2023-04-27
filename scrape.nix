@@ -84,7 +84,7 @@ let
         
         inherit (importJSON "${scraped}/info.json") file name description;
 
-        image = builtins.storePath "${scraped}/image.png";
+        image = scraped + "/image.png";
       })
       games)
     games);
