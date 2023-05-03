@@ -3,6 +3,8 @@
 with lib;
 
 let
+  keycodes = import ../keycodes.nix;
+
   retroArchBaseConfig = {
     "config_save_on_exit" = false;
     
@@ -16,7 +18,62 @@ let
     "input_menu_toggle" = "F1"; # TODO: get this from config
     "input_joypad_driver" = "udev";
 
+    # Disable all other hotkeys by default
+    "input_reset" = null;
+    "input_toggle_fast_forward" = null;
+    "input_hold_fast_forward" = null;
+    "input_toggle_slowmotion" = null;
+    "input_hold_slowmotion" = null;
+    "input_close_content" = null;
+    "input_rewind" = null;
+    "input_pause_toggle" = null;
+    "input_frame_advance" = null;
+    "input_audio_mute" = null;
+    "input_volume_up" = null;
+    "input_volume_down" = null;
+    "input_load_state" = null;
+    "input_save_state" = null;
+    "input_state_slot_increase" = null;
+    "input_state_slot_decrease" = null;
+    "input_play_replay" = null;
+    "input_record_replay" = null;
+    "input_halt_replay" = null;
+    "input_replay_slot_increase" = null;
+    "input_replay_slot_decrease" = null;
+    "input_disk_eject_toggle" = null;
+    "input_disk_next" = null;
+    "input_disk_prev" = null;
+    "input_shader_toggle" = null;
+    "input_shader_next" = null;
+    "input_shader_prev" = null;
+    "input_cheat_toggle" = null;
+    "input_cheat_index_plus" = null;
+    "input_cheat_index_minus" = null;
+    "input_screenshot" = null;
+    "input_recording_toggle" = null;
+    "input_streaming_toggle" = null;
+    "input_grab_mouse_toggle" = null;
+    "input_game_focus_toggle" = null;
+    "input_toggle_fullscreen" = null;
+    "input_desktop_menu_toggle" = null;
+    "input_toggle_vrr_runloop" = null;
+    "input_runahead_toggle" = null;
+    "input_preempt_toggle" = null;
+    "input_fps_toggle" = null;
+    "input_toggle_statistics" = null;
+    "input_ai_service" = null;
+    "input_movie_record_toggle" = null;
+    "input_netplay_game_watch" = null;
+    "input_netplay_player_chat" = null;
+    "input_osk_toggle" = null;
+    "input_send_debug_info" = null;
+
     "quit_press_twice" = false;
+
+    "auto_remaps_enable" = false;
+
+    "all_users_control_menu" = true;
+    "menu_unified_controls" = true;
 
     # Disable rewind feature
     "rewind_enable" = false;
@@ -28,24 +85,30 @@ let
     "quick_menu_show_start_recording" = false;
     "quick_menu_show_start_streaming" = false;
     "menu_show_overlays" = false;
-    "menu_unified_controls" = true;
     "menu_show_load_content_animation" = false;
 
     # Disable core cache file
     "core_info_cache_enable" = false;
+
+    # Audio settings
+    "audio_driver" = "alsa";
+    "audio_enable" = true;
+    "audio_fastforward_mute" = false;
+    "audio_sync" = true;
+    "audio_volume" = "1.000000";
   };
   
   retroArchInputConfig = player: let
-    mkInput = name: keymap: optionals (keymap != null) concatLists [
-      (optional (keymap.key != null) (nameValuePair
+    mkInput = name: mapping: optionals (mapping != null) concatLists [
+      (optional (mapping.key != null) (nameValuePair
         "input_player${toString (player.index + 1)}_${name}"
-        keymap.key))
-      (optional (keymap.button != null) (nameValuePair
+        keycodes.${mapping.key}.retroarch))
+      (optional (mapping.button != null) (nameValuePair
         "input_player${toString (player.index + 1)}_${name}_btn"
-        keymap.button))
-      (optional (keymap.axis != null) (nameValuePair
+        mapping.button))
+      (optional (mapping.axis != null) (nameValuePair
         "input_player${toString (player.index + 1)}_${name}_axis"
-        "${keymap.axis.direction}${toString keymap.axis.index}"))
+        "${mapping.axis.direction}${toString mapping.axis.index}"))
     ];
   in optionalAttrs
     (player != null)

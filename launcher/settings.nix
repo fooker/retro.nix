@@ -49,7 +49,7 @@ writeText "emulationstation-settings.cfg" (concatStringsSep "\n"
     "ScreenSaverTime" = 300000;
     "SystemSleepTime" = 0;
     "AudioCard" = "default";
-    "AudioDevice" = "Master";
+    "AudioDevice" = "";
     "CollectionSystemsAuto" = "";
     "CollectionSystemsCustom" = "";
     "GamelistViewStyle" = "automatic";
@@ -66,7 +66,7 @@ writeText "emulationstation-settings.cfg" (concatStringsSep "\n"
     "SlideshowScreenSaverVideoFilter" = ".mp4,.avi";
     "StartupSystem" = "";
     "ThemeSet" = "pixel";
-    "TransitionStyle" = "fade";
+    "TransitionStyle" = "instant";
     "UIMode" = "Full";
     "UIMode_passkey" = "";
     "VlcScreenSaverResolution" = "original";
