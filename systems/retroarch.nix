@@ -153,14 +153,11 @@ let
       in "${name} = \"${writer (builtins.typeOf value) value}\"")
       (foldl (a: b: a // b) {} configs)));
 
-  mkRetroArchEmulator = {
-    enable,
-    description,
-    core,
-    overrides ? {}
-  }: let
+  mkRetroArchEmulator = core: overrides: let
+    corePkg = pkgs.libretro.${core};
+
     pkg = pkgs.retroarch.override {
-      cores = singleton pkgs.libretro.${core};
+      cores = singleton corePkg;
     };
 
     configFile = writeRetroArchConfig [
@@ -173,7 +170,8 @@ let
       overrides
     ];
   in {
-    inherit enable description;
+    enable = mkDefault true;
+    inherit (corePkg) description;
     command = "${pkg}/bin/retroarch -L ${core} --config ${configFile} %ROM%";
   };
 
@@ -184,16 +182,8 @@ in {
       fileExtensions = [ "smc" "sfc" "swc" "mgd" ];
 
       emulators = {
-        "libretro-snes9x" = mkRetroArchEmulator {
-          enable = true;
-          description = "Super Nintendo emu - Snes9x (current) port for libretro";
-          core = "snes9x";
-        };
-        "libretro-snes9x2010" = mkRetroArchEmulator {
-          enable = true;
-          description = "Super Nintendo emu - Snes9x (1.52) port for libretro";
-          core = "snes9x2010";
-        };
+        "libretro-snes9x" = mkRetroArchEmulator "snes9x" { };
+        "libretro-snes9x2010" = mkRetroArchEmulator "snes9x2010" { };
       };
 
       defaultEmulator = mkDefault "libretro-snes9x";
@@ -203,16 +193,8 @@ in {
       fileExtensions = [ "nes" ];
 
       emulators = {
-        "libretro-fceumm" = mkRetroArchEmulator {
-          enable = true;
-          description = "NES emu - FCEUmm port for libretro";
-          core = "fceumm";
-        };
-        "libretro-nestopia" = mkRetroArchEmulator {
-          enable = true;
-          description = "NES emu - Nestopia (enhanced) port for libretro";
-          core = "nestopia";
-        };
+        "libretro-fceumm" = mkRetroArchEmulator "fceumm" { };
+        "libretro-nestopia" = mkRetroArchEmulator "nestopia" { };
       };
 
       defaultEmulator = mkDefault "libretro-fceumm";
@@ -222,16 +204,8 @@ in {
       fileExtensions = [ ".gb" ".gbc" "gba" ];
 
       emulators = {
-        "libretro-mgba" = mkRetroArchEmulator {
-          enable = true;
-          description = "(Super) Game Boy Color/GBA emulator - MGBA (optimised) port for libretro";
-          core = "mgba";
-        };
-        "libretro-gpsp" = mkRetroArchEmulator {
-          enable = true;
-          description = "GBA emu - gpSP port for libretro";
-          core = "gpsp";
-        };
+        "libretro-mgba" = mkRetroArchEmulator "mgba" { };
+        "libretro-gpsp" = mkRetroArchEmulator "gpsp" { };
       };
 
       defaultEmulator = mkDefault "libretro-mgba";

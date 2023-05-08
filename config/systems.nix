@@ -4,6 +4,64 @@ with lib;
 
 let
   retro = config;
+  
+  systems = [
+    "3do"
+    "amiga"
+    "amstradcpc"
+    "apple2"
+    "arcade"
+    "atari800"
+    "atari2600"
+    "atari5200"
+    "atari7800"
+    "atarilynx"
+    "atarist"
+    "atarijaguar"
+    "atarijaguarcd"
+    "atarixe"
+    "colecovision"
+    "c64"
+    "intellivision"
+    "macintosh"
+    "xbox"
+    "xbox360"
+    "msx"
+    "neogeo"
+    "ngp"
+    "ngpc"
+    "n3ds"
+    "n64"
+    "nds"
+    "nes"
+    "gb"
+    "gba"
+    "gbc"
+    "gc"
+    "wii"
+    "wiiu"
+    "pc"
+    "sega32x"
+    "segacd"
+    "dreamcast"
+    "gamegear"
+    "genesis"
+    "mastersystem"
+    "megadrive"
+    "saturn"
+    "psx"
+    "ps2"
+    "ps3"
+    "ps4"
+    "psvita"
+    "psp"
+    "snes"
+    "pcengine"
+    "wonderswan"
+    "wonderswancolor"
+    "zxspectrum"
+  ];
+
 in {
   options.systems = mkOption {
     description = "Emulated Systems";
@@ -11,7 +69,7 @@ in {
       options = {
         id = mkOption {
           description = "ID of the system";
-          type = types.nonEmptyStr;
+          type = types.enum systems;
           readOnly = true;
           default = name;
         };
