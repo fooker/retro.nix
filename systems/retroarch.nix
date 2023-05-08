@@ -7,7 +7,7 @@ let
 
   retroArchBaseConfig = {
     "config_save_on_exit" = false;
-    
+
     "video_fullscreen" = true;
     "video_aspect_ratio_auto" = true;
     "video_shader_enable" = false;
@@ -97,7 +97,7 @@ let
     "audio_sync" = true;
     "audio_volume" = "1.000000";
   };
-  
+
   retroArchInputConfig = player: let
     mkInput = name: mapping: optionals (mapping != null) concatLists [
       (optional (mapping.key != null) (nameValuePair
@@ -126,7 +126,7 @@ let
       (mkInput "left" player.keymap.left)
       (mkInput "right" player.keymap.right)
     ]));
-  
+
   retroarchDataConfig = let
     retroarch-database = pkgs.callPackage ../pkgs/retroarch-database.nix {};
     retroarch-assets = pkgs.callPackage ../pkgs/retroarch-assets.nix {};
@@ -142,7 +142,7 @@ let
   # Write config file for RetroArch
   writeRetroArchConfig = configs: pkgs.writeText "retroarch.cfg" (concatStringsSep "\n"
     (mapAttrsToList
-      (name: value: let 
+      (name: value: let
         writer = type: getAttr type {
           "string" = toString;
           "bool" = boolToString;
@@ -162,7 +162,7 @@ let
     pkg = pkgs.retroarch.override {
       cores = singleton pkgs.libretro.${core};
     };
-    
+
     configFile = writeRetroArchConfig [
       retroArchBaseConfig
       retroarchDataConfig
@@ -198,5 +198,44 @@ in {
 
       defaultEmulator = mkDefault "libretro-snes9x";
     };
+    nes = {
+      fullName = "Nintendo";
+      fileExtensions = [ "nes" ];
+
+      emulators = {
+        "libretro-fceumm" = mkRetroArchEmulator {
+          enable = true;
+          description = "NES emu - FCEUmm port for libretro";
+          core = "fceumm";
+        };
+        "libretro-nestopia" = mkRetroArchEmulator {
+          enable = true;
+          description = "NES emu - Nestopia (enhanced) port for libretro";
+          core = "nestopia";
+        };
+      };
+
+      defaultEmulator = mkDefault "libretro-fceumm";
+    };
+    gba = {
+      fullName = "GameBoy Advance";
+      fileExtensions = [ ".gb" ".gbc" "gba" ];
+
+      emulators = {
+        "libretro-mgba" = mkRetroArchEmulator {
+          enable = true;
+          description = "(Super) Game Boy Color/GBA emulator - MGBA (optimised) port for libretro";
+          core = "mgba";
+        };
+        "libretro-gpsp" = mkRetroArchEmulator {
+          enable = true;
+          description = "GBA emu - gpSP port for libretro";
+          core = "gpsp";
+        };
+      };
+
+      defaultEmulator = mkDefault "libretro-mgba";
+    };
   };
 }
+
