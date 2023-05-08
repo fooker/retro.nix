@@ -11,7 +11,7 @@ with lib;
 
 let
 
-  command = system: emulator: writescript "launcher-${system.id}" ''
+  command = system: emulator: writeScript "launcher-${system.id}" ''
     # Hide cursor and clear screen
     ${ncurses}/bin/tput civis
     ${ncurses}/bin/clear
